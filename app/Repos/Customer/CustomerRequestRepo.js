@@ -53,14 +53,11 @@ class CustomerRequestRepo {
      * Kiểm tra xem 1 request có thể bị hủy không
      * 1 Request có thể bị hủy khi nó là yêu cầu mới
      */
-    static async cancelable (requestId) {
-        const request = await CustomerRequest.find(requestId)
+    static async cancelable (request) {
         return request.status == Config.get('customerRequest.status.new')
     }
 
-    static async cancel (requestId) {
-        const request = await CustomerRequest.find(requestId)
-
+    static async cancel (request) {
         if (request.status == Config.get('customerRequest.status.cancel')) {
             return
         }

@@ -15,20 +15,17 @@ class CustonerConnectionRepo {
         })
     }
 
-    static async accept (connectionId) {
-        const connection = CustomerConnection.find(connectionId)
+    static async accept (connection) {
         connection.status = Config.get('customerConnection.status.accepted')
         return await connection.save()
     }
 
-    static async reject (connectId) {
-        const connection = CustomerConnection.find(connectionId)
+    static async reject (connection) {
         connection.status = Config.get('customerConnection.status.rejected')
         return await connection.save()
     }
 
-    static async close (connectId) {
-        const connection = CustomerConnection.find(connectionId)
+    static async close (connection) {
         connection.status = Config.get('customerConnection.status.closed')
 
         return await connection.save()

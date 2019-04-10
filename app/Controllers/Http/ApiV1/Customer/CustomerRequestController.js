@@ -23,8 +23,9 @@ class CustomerRequestController {
      * Hủy yêu cầu
      */
     async cancel ({ auth, request, params, response }) {
-        const hasRequest = await CustomerRepo.hasRequest(auth.user.id, params.request_id)
-        const cancelable = await CustomerRequestRepo.cancelable(params.request_id)
+        const hasRequest = await CustomerRepo.hasRequest(auth.user, params.request_id)
+        const customerRequest = await CustomerRequestRepo.find(params.request_id)
+        const cancelable = await CustomerRequestRepo.cancelable(customerRequest)
 
         if (!hasRequest) {
             return response.status(400).json({
@@ -40,7 +41,7 @@ class CustomerRequestController {
             })
         }
 
-        await CustomerRequestRepo.cancel(params.request_id)
+        await CustomerRequestRepo.cancel(customerRequest)
 
         return response.json({
             success: true,

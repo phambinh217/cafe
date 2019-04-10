@@ -3,8 +3,7 @@
 class InvoiceResponse {
     static async currentInvoice (invoice) {
         const formatedInvoice = invoice.toJSON()
-        console.log(formatedInvoice.items)
-        delete formatedInvoice.delete_at
+        delete formatedInvoice.deleted_at
 
         formatedInvoice.items.map(item => {
             delete item.updated_at

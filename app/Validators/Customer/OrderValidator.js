@@ -3,8 +3,9 @@
 const { validate } = use('Validator')
 
 class OrderValidator {
-    static async validateOrderFood (data) {
+    static async orderFood (data) {
         return await validate(data, {
+            'table_id': 'required',
             'foods.*.id': 'required',
             'food.*.quantity': 'required|min:1'
         })

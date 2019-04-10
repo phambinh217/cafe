@@ -8,7 +8,7 @@ const Event = use('Event')
 
 class OrderController {
     async orderFood ({ auth, request, response }) {
-        const validator = await OrderValidator.validateOrderFood(request.post())
+        const validator = await OrderValidator.orderFood(request.post())
 
         if (validator.fails()) {
             return response.status(406).json({
@@ -19,7 +19,7 @@ class OrderController {
         }
 
         const foods = request.post().foods
-        const invoice = await CustomerRepo.findOrCreateLatestInvoice(auth.user.id)
+        const invoice = await CustomerRepo.findOrCreateLatestInvoice(auth.user)
         const addedItems = []
 
         for (let item of foods) {

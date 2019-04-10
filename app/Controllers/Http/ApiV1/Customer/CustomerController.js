@@ -23,7 +23,7 @@ class CustomerController {
             })
         }
 
-        CustomerRepo.setTable(auth.user.id, request.all().table_id)
+        CustomerRepo.setTable(auth.user, request.all().table_id)
 
         return response.json({
             success: true,
@@ -42,7 +42,7 @@ class CustomerController {
             })
         }
 
-        CustomerRepo.update(auth.user.id, request.only([
+        CustomerRepo.update(auth.user, request.only([
             'avatar',
             'phone',
             'last_name',
@@ -71,7 +71,7 @@ class CustomerController {
             })
         }
 
-        await CustomerRepo.updateSettings(auth.user.id, request.only([
+        await CustomerRepo.updateSettings(auth.user, request.only([
             'public_phone_number',
             'public_facebook',
             'public_date_of_birth',

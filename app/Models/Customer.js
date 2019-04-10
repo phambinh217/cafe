@@ -32,6 +32,10 @@ class Customer extends Model {
         return this.belongsTo('App/Models/Table', 'current_table_id')
     }
 
+    invoices () {
+        return this.hasMany('App/Models/Invoice', 'id', 'customer_id')
+    }
+
     connections () {
         return this.hasMany('App/Models/CustomerConnection', 'id', 'customer1_id')
     }

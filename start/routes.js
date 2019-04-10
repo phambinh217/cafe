@@ -4,7 +4,8 @@ const Route = use('Route')
 
 Route.on('/').render('welcome')
 
-Route.post('auth/login', 'ApiV1/Customer/AuthController.login').prefix('api/v1/customer')
+Route.post('api/v1/customer/auth/login', 'ApiV1/Customer/AuthController.login')
+Route.post('api/v1/admin/auth/login', 'ApiV1/Admin/AuthController.login')
 
 Route.group(() => {
     Route.get('/', 'ApiV1/Customer/CustomerController.index')
@@ -14,7 +15,7 @@ Route.group(() => {
     Route.post('update_settings', 'ApiV1/Customer/CustomerController.updateSettings')
     Route.get('invoices/current', 'ApiV1/Customer/InvoiceController.currentInvoice')
     Route.post('set_table', 'ApiV1/Customer/CustomerController.setTable')
-    Route.post('order/foods', 'ApiV1/Customer/OrderController.orderFood').middleware('customerSetTable')
+    Route.post('order/foods', 'ApiV1/Customer/OrderController.orderFood')
 
     Route.post('social/connections/:id/reject', 'ApiV1/Customer/SocialController.reject')
     Route.post('social/connections/:id/accept', 'ApiV1/Customer/SocialController.accept')
@@ -28,3 +29,8 @@ Route.group(() => {
     Route.get('social/tables', 'ApiV1/Common/SocialController.listTable')
 })
 .prefix('api/v1/common')
+
+
+Route.group(() => {
+    Route.get('customer_requests', 'ApiV1/Admin/CustomerRequestController.list')
+}).prefix('api/v1/admin').middleware('auth:admin')

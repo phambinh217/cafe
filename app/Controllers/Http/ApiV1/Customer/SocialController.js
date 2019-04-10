@@ -53,7 +53,7 @@ class SocialController {
             })
         }
 
-        await CustomerConnectionRepo.accept(params.connection_id)
+        await CustomerConnectionRepo.accept(connection)
 
         return response.json({
             success: true,
@@ -81,7 +81,7 @@ class SocialController {
             })
         }
 
-        await CustomerConnectionRepo.reject(params.connection_id)
+        await CustomerConnectionRepo.reject(connection)
 
         return response.json({
             success: true,
@@ -109,7 +109,7 @@ class SocialController {
             })
         }
 
-        await CustomerConnectionRepo.close(params.connection_id)
+        await CustomerConnectionRepo.close(connection)
 
         return response.json({
             success: true,

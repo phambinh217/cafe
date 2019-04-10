@@ -15,14 +15,14 @@ class CustomerRepo {
         return await Customer.findBy('phone', phone)
     }
 
-    static async setTable (customerId, tableId) {
-        return await Customer.query().where('id', customerId).update({ current_table_id: tableId })
+    static async setTable (customer, tableId) {
+        return await customer.update({ current_table_id: tableId })
     }
 
-    static async findLatestInvoice (customerId) {
+    static async findLatestInvoice (customer) {
         const invoices = await Invoice.query()
             .where('status', Config.get('invoice.status.new'))
-            .where('customer_id', customerId)
+            .where('customer_id', customer.id)
             .with('items')
             .orderBy('id', 'desc')
             .limit(1)
@@ -33,10 +33,10 @@ class CustomerRepo {
         }
     }
 
-    static async findOrCreateLatestInvoice (customerId) {
+    static async findOrCreateLatestInvoice (customer) {
         const invoices = await Invoice.query()
             .where('status', Config.get('invoice.status.new'))
-            .where('customer_id', customerId)
+            .where('customer_id', customer.id)
             .orderBy('id', 'desc')
             .limit(1)
             .fetch()
@@ -45,22 +45,19 @@ class CustomerRepo {
             return invoices.first()
         }
 
-        const customer = await Customer.find(customerId)
-
         return await Invoice.create({
-            customer_id: customerId,
+            customer_id: customer.id,
             customer_name: customer.name,
             status: Config.get('invoice.status.new'),
         })
     }
 
-    static async hasRequest (customerId, requestId) {
-        const request = await CustomerRequest.query().where('customer_id', customerId).where('id', requestId).fetch()
+    static async hasRequest (customer, requestId) {
+        const request = await CustomerRequest.query().where('customer_id', customer.id).where('id', requestId).fetch()
         return !!request
     }
 
-    static async updateSettings (customerId, settings) {
-        const customer = await Customer.find(customerId)
+    static async updateSettings (customer, settings) {
         let options = customer.options ? JSON.parse(customer.options) : {}
         options = {... options, ...settings}
         customer.options = options
@@ -72,8 +69,7 @@ class CustomerRepo {
         return await customer.save()
     }
 
-    static async update (customerId, data) {
-        const customer = await Customer.find(customerId)
+    static async update (customer, data) {
         customer.merge(data)
         return await customer.save()
     }
@@ -84,7 +80,7 @@ class CustomerRepo {
 
     static async isConnecting (customerId) {
         const connections = await CustomerConnection.query()
-            .where('customer1_id', customeriId)
+            .where('customer1_id', customerId)
             .orWhere('customer2_id', customerId)
             .where('accepted', 1)
             .where('status', 'connecting')

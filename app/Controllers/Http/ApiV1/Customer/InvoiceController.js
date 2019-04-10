@@ -9,7 +9,7 @@ class InvoiceController {
      */
     async currentInvoice ({ auth, request, response }) {
         const customerId = auth.user.id
-        const latestInvoice = await CustomerRepo.findLatestInvoice(customerId)
+        const latestInvoice = await CustomerRepo.findLatestInvoice(auth.user)
         return response.json({
             success: true,
             message: 'Done',

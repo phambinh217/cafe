@@ -3,7 +3,7 @@ module.exports = {
         pending: 'pending',
         connecting: 'connecting',
         accepted: 'accepted',
-        rejected: :'rejected'
-        closed: :'closed'
+        rejected: 'rejected',
+        closed: 'closed'
     }
 }
