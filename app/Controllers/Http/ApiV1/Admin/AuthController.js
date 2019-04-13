@@ -29,6 +29,10 @@ class AuthController {
             }
         })
     }
+
+    async logout ({ auth, request, response }) {
+
+    }
 }
 
 module.exports = AuthController

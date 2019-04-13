@@ -1,8 +1,8 @@
 'use strict'
 
 const CustomerRequest = use('App/Models/CustomerRequest')
-const Customer = use('App/Models/Customer')
 const Food = use('App/Models/Food')
+const Table = use('App/Models/Table')
 const InvoiceItem = use('App/Models/InvoiceItem')
 const Config = use('Config')
 
@@ -25,8 +25,7 @@ class CustomerRequestRepo {
         return await query.with('assigner').where('customer_id', customerId).limit(options.per_page).fetch()
     }
 
-    static async createRequestOrderFood (customerId, foods, items) {
-        const customer = await Customer.find(customerId)
+    static async createRequestOrderFood (customer, foods, items, tableId) {
         const fetchedFoods = await Food.query().setVisible(['id', 'title', 'price']).whereIn('id', foods.map(f => f.id)).fetch()
         const requestTitleSegments = []
         for (let item of fetchedFoods.toJSON()) {
@@ -34,7 +33,8 @@ class CustomerRequestRepo {
             requestTitleSegments.push(`${quantity} ${item.title}`)
         }
 
-        const table = await customer.table().setVisible(['id', 'title']).fetch()
+        const tables = await Table.query().setVisible(['id', 'title']).where('id', tableId).fetch()
+        const table = tables.first()
         const title = requestTitleSegments.join(', ') + ` tới bàn ${table.title}`
 
         return await customer.requests().create({

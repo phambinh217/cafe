@@ -6,6 +6,7 @@ Route.on('/').render('welcome')
 
 Route.post('api/v1/customer/auth/login', 'ApiV1/Customer/AuthController.login')
 Route.post('api/v1/admin/auth/login', 'ApiV1/Admin/AuthController.login')
+Route.get('api/v1/admin/test', 'ApiV1/Admin/PusherController.push')
 
 Route.group(() => {
     Route.get('/', 'ApiV1/Customer/CustomerController.index')
@@ -32,5 +33,11 @@ Route.group(() => {
 
 
 Route.group(() => {
+    Route.get('invoices', 'ApiV1/Admin/InvoiceController.list')
+    Route.get('gifts', 'ApiV1/Admin/GiftController.list')
+    Route.get('foods', 'ApiV1/Admin/FoodController.list')
+    Route.get('floors', 'ApiV1/Admin/FloorController.list')
+    Route.get('customers', 'ApiV1/Admin/CustomerController.list')
     Route.get('customer_requests', 'ApiV1/Admin/CustomerRequestController.list')
+    Route.get('pusher/clients', 'ApiV1/Admin/PusherController.listClient')
 }).prefix('api/v1/admin').middleware('auth:admin')

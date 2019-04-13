@@ -10,6 +10,10 @@ class Admin extends Model {
     tokens () {
         return this.hasMany('App/Models/AdminToken')
     }
+
+    notifications () {
+        return this.hasMany('App/Models/AdminNotification')
+    }
 }
 
 module.exports = Admin

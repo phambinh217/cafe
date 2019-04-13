@@ -22,6 +22,10 @@ class CustomerRequestController {
     async update () {
 
     }
+
+    async assignAdmin () {
+
+    }
 }
 
 module.exports = CustomerRequestController

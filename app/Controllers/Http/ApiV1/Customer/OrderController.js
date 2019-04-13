@@ -18,7 +18,7 @@ class OrderController {
             })
         }
 
-        const foods = request.post().foods
+        const { foods, table_id } = request.post()
         const invoice = await CustomerRepo.findOrCreateLatestInvoice(auth.user)
         const addedItems = []
 
@@ -27,9 +27,14 @@ class OrderController {
             addedItems.push(addedItem)
         }
 
-        CustomerRequestRepo.createRequestOrderFood(auth.user.id, foods, addedItems)
+        const createdCustomerRequest = await CustomerRequestRepo.createRequestOrderFood(auth.user, foods, addedItems, table_id)
 
-        Event.fire('customer::orderFood', { userId: auth.user.id, foods: foods })
+        Event.fire('customer::orderFood', {
+            customer: auth.user,
+            foods: foods,
+            tableId: table_id,
+            customerRequest: createdCustomerRequest
+        })
 
         return response.json({
             success: true,

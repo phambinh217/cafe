@@ -11,6 +11,10 @@ class VanillaSerializer {
     this.isOne = isOne
   }
 
+  rows () {
+    return this.rows
+  }
+
   _attachRelations (modelInstance, output) {
     _.each(modelInstance.$relations, (values, relation) => {
       output[relation] = values && typeof (values.toJSON) === 'function' ? values.toJSON() : values
