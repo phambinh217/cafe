@@ -1,7 +1,9 @@
 module.exports = {
     status: {
         new: 'new',
-        cancel: 'cancel'
+        canceled: 'canceled',
+        done: 'done',
+        assigned: 'assigned'
     },
 
     type: {

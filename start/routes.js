@@ -33,6 +33,8 @@ Route.group(() => {
 
 
 Route.group(() => {
+    Route.get('autoload', 'ApiV1/Admin/AutoLoadController.autoload')
+    Route.get('social/tables', 'ApiV1/Admin/SocialController.listTable')
     Route.get('invoices', 'ApiV1/Admin/InvoiceController.list')
     Route.get('gifts', 'ApiV1/Admin/GiftController.list')
     Route.get('foods', 'ApiV1/Admin/FoodController.list')
