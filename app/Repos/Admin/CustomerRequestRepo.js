@@ -21,7 +21,28 @@ class CustomerRequestRepo {
             query = query.where('status', options.status)
         }
 
+        if (options.hasOwnProperty('sort')) {
+            switch (options.sort) {
+                case 'latest':
+                    query = query.orderBy('updated_at', 'desc')
+                    break;
+                case 'oldest':
+                    query = query.orderBy('updated_at', 'asc')
+                    break;
+            }
+        }
+
         return await query.with('assigner').limit(options.per_page).fetch()
+    }
+
+    static async update (customerRequest, data) {
+        customerRequest.merge(data)
+        await customerRequest.save()
+        return customerRequest
+    }
+
+    static async find (requestId) {
+        return await CustomerRequest.find(requestId)
     }
 }
 module.exports = CustomerRequestRepo

@@ -8,10 +8,13 @@ class GiftRepo {
         let query = Gift.query()
 
         if (options.hasOwnProperty('ignore_ids')) {
-            if (typeof options.ignore_ids == 'string') {
+            if (typeof options.ignore_ids == 'string' && options.ignore_ids.length > 0) {
                 options.ignore_ids = options.ignore_ids.split(',').map(id => id.trim())
             }
-            query = query.whereNotIn('id', options.ignore_ids)
+
+            if (Array.isArray(options.ignore_ids) && options.ignore_ids.length > 0) {
+                query = query.whereNotIn('id', options.ignore_ids)
+            }
         }
 
         return await query.limit(options.per_page).fetch()
