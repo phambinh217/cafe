@@ -9,8 +9,9 @@ class AdminNotification {
         data = {...data, ...{ is_checked: false, scope: 'all' }}
         for (let admin of admins.rows) {
             admin.notifications().create(data)
-            WebsocketService.sendToUser('admin', admin.id)
         }
+
+        WebsocketService.sendToUsers('admin', admins.rows.map(i => i.id), 'HAS_NEW_REQUEST', data)
     }
 }
 

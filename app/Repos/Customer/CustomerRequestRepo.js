@@ -5,6 +5,7 @@ const Food = use('App/Models/Food')
 const Table = use('App/Models/Table')
 const InvoiceItem = use('App/Models/InvoiceItem')
 const Config = use('Config')
+const Database = use('Database')
 
 class CustomerRequestRepo {
     static async list (customerId, options) {
@@ -25,7 +26,7 @@ class CustomerRequestRepo {
             query = query.where('status', options.status)
         }
 
-        return await query.with('assigner').where('customer_id', customerId).limit(options.per_page).fetch()
+        return await query.with('assigner').where('customer_id', customerId).whereNull('archived_at').limit(options.per_page).fetch()
     }
 
     static async createRequestOrderFood (customer, foods, items, tableId) {
@@ -39,11 +40,17 @@ class CustomerRequestRepo {
         const tables = await Table.query().setVisible(['id', 'title']).where('id', tableId).fetch()
         const table = tables.first()
         const title = requestTitleSegments.join(', ') + ` tới bàn ${table.title}`
+        let maxPosition = (await Database.from('customer_requests').where('status', Config.get('customerRequest.status.new')).whereNull('archived_at').max('position'))[0].max
+        let nextPosition = 1
+        if (maxPosition) {
+            nextPosition = maxPosition + 1
+        }
 
         return await customer.requests().create({
             title: title,
             status: Config.get('customerRequest.status.new'),
             type: Config.get('customerRequest.type.order_food'),
+            position: nextPosition,
             metas: {
                 foods: fetchedFoods.toJSON(),
                 table: table.toJSON(),

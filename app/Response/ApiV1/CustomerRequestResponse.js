@@ -6,6 +6,8 @@ class CustomerRequestResponse {
 
         formatedRequests.map(request => {
             delete request.updated_at
+            delete request.archived_at
+            delete request.position
             delete request.assign_admin_id
 
             request.metas = JSON.parse(request.metas)

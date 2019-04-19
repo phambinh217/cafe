@@ -15,4 +15,5 @@
 
 const Ws = use('Ws')
 
-Ws.channel('ws', 'WebsocketController')
+Ws.channel('ws', 'WebsocketController').middleware(['auth:admin'])
+Ws.channel('ws_customer', 'WebsocketController').middleware(['auth:customer'])

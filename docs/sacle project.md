@@ -1,0 +1,3 @@
+# Scale project
+
+# Câu chuyện

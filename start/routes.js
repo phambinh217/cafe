@@ -42,8 +42,10 @@ Route.group(() => {
     Route.get('customers', 'ApiV1/Admin/CustomerController.list')
 
     Route.get('customer_requests', 'ApiV1/Admin/CustomerRequestController.list')
+    Route.post('customer_requests/update_positions', 'ApiV1/Admin/CustomerRequestController.updatePositions')
     Route.post('customer_requests/:id/change-status', 'ApiV1/Admin/CustomerRequestController.changeStatus')
     Route.post('customer_requests/:id/assign', 'ApiV1/Admin/CustomerRequestController.assign')
+    Route.get('customer_requests/:id', 'ApiV1/Admin/CustomerRequestController.show')
 
     Route.get('pusher/clients', 'ApiV1/Admin/PusherController.listClient')
 }).prefix('api/v1/admin').middleware('auth:admin')

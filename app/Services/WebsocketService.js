@@ -20,8 +20,34 @@ class WebSocketService {
         return this.clients
     }
 
-    sendToUser (type, userId) {
+    sendToUsers (type, userIds, event, data) {
+        const Admin = use('App/Models/Admin')
+        const Customer = use('App/Models/Customer')
 
+        const clients = this.clients.filter(client => {
+            if (type == 'admin') {
+                if (client.auth.user instanceof Admin) {
+                    if (userIds.indexOf(client.auth.user.id) > -1) {
+                        return true
+                    }
+                }
+            } else if (type == 'customer') {
+                if (client.auth.user instanceof Customer) {
+                    if (userIds.indexOf(client.auth.user.id) > -1) {
+                        return true
+                    }
+                }
+            }
+
+            return false
+        })
+
+        if (clients.length > 0) {
+            let firstClient
+            for (firstClient of clients) break;
+            const socketIds = clients.map(i => i.socket.id)
+            firstClient.socket.emitTo(event, data, socketIds)
+        }
     }
 }
 

@@ -8,6 +8,7 @@ class CustomerRequestValidator {
         const statusAvailable = Object.keys(Config.get('customerRequest.status')).join(',')
         return await validate(data, {
             status: 'required|in:' + statusAvailable,
+            position: 'number',
         })
     }
 

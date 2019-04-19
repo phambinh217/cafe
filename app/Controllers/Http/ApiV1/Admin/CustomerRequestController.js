@@ -16,6 +16,22 @@ class CustomerRequestController {
         })
     }
 
+    async show ({ request, response, params }) {
+        const customerRequest = await CustomerRequestRepo.find(params.id)
+        if (!customerRequest) {
+            return response.status(404).json({
+                success: false,
+                message: 'Not found'
+            })
+        }
+
+        return response.json({
+            success: true,
+            messages: 'Done',
+            request: customerRequest
+        })
+    }
+
     async store () {
 
     }
@@ -33,12 +49,31 @@ class CustomerRequestController {
         if (validator.fails()) {
             return response.status(406).json({
                 success: false,
+                message: 'Fail',
+                errors: validator.messages()
+            })
+        }
+
+        const { status, position } = request.all()
+        CustomerRequestRepo.update(customerRequest, { status: status, position: position })
+
+        return response.json({
+            success: true,
+            message: 'Done'
+        })
+    }
+
+    async updatePositions ({ params, request, response }) {
+        const { positions } = request.all()
+
+        if (!positions) {
+            return response.json({
+                success: false,
                 message: 'Fail'
             })
         }
 
-        const { status } = request.all()
-        CustomerRequestRepo.update(customerRequest, { status: status })
+        CustomerRequestRepo.updatePositions(positions)
 
         return response.json({
             success: true,
