@@ -4,7 +4,12 @@ const CustomerRequest = use('App/Models/CustomerRequest')
 const Database = use('Database')
 
 class CustomerRequestRepo {
-    static async list (options) {
+    static async count (options) {
+        const query = this.query(options)
+        return await query.getCount()
+    }
+
+    static query (options) {
         options = { ...{ per_page: 20 }, ...options }
         let query = CustomerRequest.query()
 
@@ -15,6 +20,16 @@ class CustomerRequestRepo {
 
             if (Array.isArray(options.ignore_ids) && options.ignore_ids.length > 0) {
                 query = query.whereNotIn('id', options.ignore_ids)
+            }
+        }
+
+        if (options.hasOwnProperty('customer_ids')) {
+            if (typeof options.customer_ids == 'string' && options.customer_ids.length > 0) {
+                options.customer_ids = options.customer_ids.split(',').map(id => id.trim())
+            }
+
+            if (Array.isArray(options.customer_ids) && options.customer_ids.length > 0) {
+                query = query.whereIn('customer_id', options.customer_ids)
             }
         }
 
@@ -39,7 +54,17 @@ class CustomerRequestRepo {
             }
         }
 
-        return await query.with('assigner').limit(options.per_page).fetch()
+        return query
+    }
+
+    static async list (options) {
+        const query = this.query(options)
+
+        return await query
+            .with('customer')
+            .with('assigner')
+            .limit(options.per_page)
+            .fetch()
     }
 
     static async update (customerRequest, data) {
@@ -49,7 +74,7 @@ class CustomerRequestRepo {
     }
 
     static async find (requestId) {
-        return await CustomerRequest.find(requestId)
+        return (await CustomerRequest.query().where('id', requestId).with('customer').fetch()).first()
     }
 
     static async updatePositions (positions) {

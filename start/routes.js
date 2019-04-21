@@ -39,9 +39,12 @@ Route.group(() => {
     Route.get('gifts', 'ApiV1/Admin/GiftController.list')
     Route.get('foods', 'ApiV1/Admin/FoodController.list')
     Route.get('floors', 'ApiV1/Admin/FloorController.list')
+    Route.get('tables', 'ApiV1/Admin/TableController.list')
+    Route.get('tables/:id', 'ApiV1/Admin/TableController.show')
     Route.get('customers', 'ApiV1/Admin/CustomerController.list')
 
     Route.get('customer_requests', 'ApiV1/Admin/CustomerRequestController.list')
+    Route.get('customer_requests/count', 'ApiV1/Admin/CustomerRequestController.count')
     Route.post('customer_requests/update_positions', 'ApiV1/Admin/CustomerRequestController.updatePositions')
     Route.post('customer_requests/:id/change-status', 'ApiV1/Admin/CustomerRequestController.changeStatus')
     Route.post('customer_requests/:id/assign', 'ApiV1/Admin/CustomerRequestController.assign')

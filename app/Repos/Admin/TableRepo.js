@@ -23,7 +23,9 @@ class TableRepo {
         }
 
         return await query
-            .with('people')
+            .with('people', builder => {
+                builder.where('is_online', true)
+            })
             .limit(options.per_page)
             .fetch()
     }

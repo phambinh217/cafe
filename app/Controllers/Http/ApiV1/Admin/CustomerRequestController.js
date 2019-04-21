@@ -5,6 +5,19 @@ const CustomerRequestResponse = use('App/Response/ApiV1/Admin/CustomerRequestRes
 const CustomerRequestValidator = use('App/Validators/Admin/CustomerRequestValidator')
 
 class CustomerRequestController {
+    async count ({ request, response }) {
+        return response.json({
+            success: true,
+            message: 'Done',
+            count: {
+                new: await CustomerRequestRepo.count({ status: 'new' }),
+                assigned: await CustomerRequestRepo.count({ status: 'assigned' }),
+                done: await CustomerRequestRepo.count({ status: 'done' }),
+                canceled: await CustomerRequestRepo.count({ status: 'canceled' }),
+            }
+        })
+    }
+
     async list ({ request, response }) {
         const options = request.all()
         const requests = await CustomerRequestRepo.list(options)

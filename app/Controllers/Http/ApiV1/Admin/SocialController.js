@@ -1,7 +1,7 @@
 'use strict'
 
-const TableRepo = use('App/Repos/Common/TableRepo')
-const SocialResponse = use('App/Response/ApiV1/SocialResponse')
+const TableRepo = use('App/Repos/Admin/TableRepo')
+const SocialResponse = use('App/Response/ApiV1/Admin/SocialResponse')
 
 class SocialController {
     /**
